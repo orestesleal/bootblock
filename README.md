@@ -1,1 +1,1 @@
-x86 initalization procedure
+< x86 pc initalization procedure >
