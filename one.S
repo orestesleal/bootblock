@@ -1,0 +1,88 @@
+/*
+ *  GNU assembler file
+ *  first try of the x86 bootblock
+ *
+ *  NOTE: I'm going to try to make brief but important remarks
+ *        during the file and in this intro so we can follow
+ *        the flow of what should be happening, what is the
+ *        state at specific times of the execution of the bootblock,
+ *        etc but probably is going to be extensive
+ *
+ *  The BIOS launches us in real-adress mode (via INT 19h) with paging 
+ *  disabled (CR0[31] = 0), all other bits on CR0 are zero too
+ *
+ *  State of all general purpose and other registers is undefined so
+ *  we don't rely on the content of those at the startup for anything
+ *
+ *  Maximum size of the linear address space in real-address mode
+ *  is 2^20 bytes (1MB) but since real-address mode use segments
+ *  each segment can be a maximum of 64 KBytes.
+ *
+ *  Real-address mode use a 'Selector' to select a code segment
+ *  and Offset to select a displacement in that (64K) segment.
+ *  painful stuff from the 8086 era.
+ *  
+ *  > * More info on the Intel Manual Vol. 1 Section 3.3
+ *
+ *  A multiprocessor machine runs the Multiprocessor protocol (MP)
+ *  which select the bootstrap processor (BSP), which become the
+ *  active processor (the one available to execute code) for the
+ *  initialization. More information on the Intel manual Vol. 3A 
+ *  Chapter 9  (Processor Management and Initialization)
+ *  
+ *  Should an IDT (Interrupt Descriptor Table or Interrupt Vector
+ *  table) be at address 0 and was setup by the BIO? 
+ *  See IDM (Intel Developer Manual)  Vol. 3A Sec. 9.7
+ *
+ *  This is Gold:  https://en.wikipedia.org/wiki/BIOS#System_startup
+ *
+ *  So far the BIOS has dealt with a lot of platform specific stuff
+ *  in the machine. Upon copying of the 512 bytes from boot disk
+ *  to memory we must take care from there by:
+ *
+ *    - Setting up a GDT (for memory management)
+ *    - Load another piece of the initialization code (kernel?) since
+ *      512 bytes is not enough. This can be done using BIOS services
+ *      to read beyond the first 512 bytes of the booting disk. However,
+ *      this require that the bootsector is copied on a boot disk
+ *      and after that (contiguous) there can be another file (data)
+ *      copied that can act as the kernel. This can be a flat file
+ *      with no MBR or anything just a flat boot file since the BIOS
+ *      does't know anything about disk paritions, mbr or anything
+ *      so we are free to do it out way. This type of boot disk
+ *      can be created with dd and the bootsector copied into the
+ *      first 512 bytes, and another data (kernel) after those.
+ *      this file can be loaded on channel ATA0-master on bochs to test
+ *    - And some more platform specific procedures before enabling 
+ *      protected mode and jump to kernel initialization.
+ *
+ *  NOTE: If all this is accurate (last paragraph) I don't know. but is
+ *  a starting point to begin reading and thinking.
+ *
+ *  So on this stage we have the CPU state (initialized), on top we
+ *  have the BIOS, which already did a great deal of initialization
+ *  of registers, segments, selectors, the basic Interrupt Vector Table, etc.
+ *  all this in real-address mode (16 bit) and after the BIOS gives control 
+ *  to us we need to follow the platform requirements to be able to get to
+ *  protected mode and take it from there (32 bit execution) which is
+ *  is described in IDM Vol 3A Sec 9.8
+ *
+ *  x86 memory addressing is also explained in a great deal in the book 
+ *  Understanding the Linux Kernel 3rd Ed -- Chapter 2: Memory Addressing
+ *
+ */
+
+.intel_syntax      /*   use intel syntax */
+
+.code16            /*   generate 16 bit code   */
+
+.global _start     /*   publish the _start symbol to the linker  */
+
+.text              /*   executable code segment */
+_start:
+     mov %ax, word ptr 4  /*  dummy instruction  */
+
+
+.data               /*  DATA segment  */
+
+
