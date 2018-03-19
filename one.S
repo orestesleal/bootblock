@@ -56,13 +56,19 @@
  *    - And some more platform specific procedures before enabling 
  *      protected mode and jump to kernel initialization.
  *
- *  NOTE: If all this is accurate (last paragraph) I don't know. but is
- *  a starting point to begin reading and thinking.
+ *  NOTE: All this should be close to accurate, if not is at leat
+ *  a starting point to begin reading, thinking, writing.
  *
+ *  Review
+ *  ======
  *  So on this stage we have the CPU state (initialized), on top we
  *  have the BIOS, which already did a great deal of initialization
  *  of registers, segments, selectors, the basic Interrupt Vector Table, etc.
- *  all this in real-address mode (16 bit) and after the BIOS gives control 
+ *  device initialization, etc. so we must consider that the BIOS did a lot
+ *  of stuff for us since by default there is not an IDT in real-mode,
+ *  or anything setup just the CPU running code from a specific location
+ *  (the ROM code) in a specific address.
+ *  All this in real-address mode (16 bit) and after the BIOS gives control 
  *  to us we need to follow the platform requirements to be able to get to
  *  protected mode and take it from there (32 bit execution) which is
  *  is described in IDM Vol 3A Sec 9.8
