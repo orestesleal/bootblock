@@ -1,6 +1,5 @@
 /*
- *  GNU assembler file
- *  first try of the x86 bootblock
+ *  x86 bootblock
  *
  *  NOTE: I'm going to try to make brief but important remarks
  *        during the file and in this intro so we can follow
@@ -10,6 +9,8 @@
  *
  *  The BIOS launches us in real-adress mode (via INT 19h) with paging 
  *  disabled (CR0[31] = 0), all other bits on CR0 are zero too
+ *  XXX: not complete accurate, it was like that on the i486 era
+ *  not now
  *
  *  State of all general purpose and other registers is undefined so
  *  we don't rely on the content of those at the startup for anything
@@ -78,17 +79,35 @@
  *
  */
 
-.intel_syntax      /*   use intel syntax */
+.intel_syntax 
 
-.code16            /*   generate 16 bit code   */
+.code16          
 
-.global _start     /*   publish the _start symbol to the linker  */
+.global _start    
 
-.text              /*   executable code segment */
+.text             
 _start:
-     mov %ax, word ptr 4  /*  dummy instruction  */
+     //mov %ax, word ptr 4  /*  dummy instruction  */
+
 
 
 .data               /*  DATA segment  */
+
+
+
+
+// just a test using fill to fill some bytes
+.fill 10 , 1, 0
+
+// TODO: calculate the current size and pad with zeros the rest 
+// of the remaining bytes in the complete 510 bytes. Don't know how
+// to do it on gnu-as. read the manual, couln't find it, + is late, 
+// falling asleep...
+.fill 510-$, 1, 0
+
+.byte 0x55,0xAA      /* last 2 bytes, BIOS signature, aparently some bioses
+                        don't care, but some do just we use it, */
+
+
 
 
