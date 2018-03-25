@@ -1,0 +1,6 @@
+the bootsector can be added as a floppy drive on bochs with
+the following config, replace PATH with the correct location
+
+boot: floppy
+floppy_bootsig_check: disabled=0
+floppya: 720k=/PATH/bootblock, status=inserted
