@@ -5,7 +5,7 @@
 
 ; A (aparently) full spec of a BIOS behavior and features is found on [1]
 
-ORG 0x7c00             ; the will load us into this address, so we tell 
+ORG 0x7c00             ; the BIOS will load us into this address, so we tell 
                        ; the assembler to begin assembling instructions
                        ; beginning with this address
 
@@ -13,11 +13,11 @@ SECTION .text
 
 ; first steps
 ; ===========
-; setup a real mode stack - we are in the beginning of a
-; 64k segment in selector 0, that is the space we have 
-; to make a local stack (not in other segment) 
-; possibly close to the very end of the segment since
-; the stack grows into lower memory addresses
+; setup a real mode stack - we are in a 64k segment 
+; in selector 0, with this space we have to make a 
+; local stack (not in other segment) possibly close 
+; to the very end of the segment since the stack 
+; grows into lower memory addresses
 
   mov ax, 0x8000        ; setup the stack segment
   mov ss, ax         
@@ -27,10 +27,10 @@ SECTION .text
   ; use the video services provided by the BIOS [1] to display a message
   mov al, 1
   mov bh, 0
-  mov bl, 11100000b     ; color attribute, high nibble=bg, low-nibble=text
+  mov bl, 00101111b     ; color attribute, high nibble=bg, low-nibble=text
   mov cx, buffer_len    ; length of buffer with text
-  mov dl, 10
-  mov dh, 7
+  mov dl, 0             ; column
+  mov dh, 0              ; 25
   push cs
   pop es
   mov bp, buffer
