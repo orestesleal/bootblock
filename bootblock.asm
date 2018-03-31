@@ -3,6 +3,7 @@
  ;
  ; [1] https://web.archive.org/web/20120425004936/http://www.acpica.org:80/download/specsbbs101.pdf
  ; [2] http://www.ablmcc.edu.hk/~scy/CIT/8086_bios_and_dos_interrupts.htm
+ ; [3] http://www.pcguide.com/ref/mbsys/bios/index.htm
  ;
  ;
  ;  NOTE: I'm going to try to make brief but important remarks
@@ -94,7 +95,7 @@ ORG 0x7c00             ; the BIOS will load us into this address, so we tell
                        ; BIOS -> IPL -> bootsector
                        ;   |              |
                        ;   ----------------
-                       ;   --> give control
+                       ;   -> gives control
 SECTION .text
 
 ; first steps

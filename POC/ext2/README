@@ -1,0 +1,5 @@
+Proof of concept in C to read the superblock of an ext2 filesystem
+to implement loading a kernel from an ext2 formatted filesystem.
+
+Since ext2 doesn't use the first 1024 bytes we use that space 
+for the bootblock
