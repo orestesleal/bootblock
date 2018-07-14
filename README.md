@@ -1,1 +1,1 @@
-x86 bootsector
+# A basic x86 bootsector
